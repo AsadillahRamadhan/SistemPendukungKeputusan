@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\ElectreEvaluation;
+use App\Models\ElectreEvaluation;
 use Illuminate\Support\Facades\DB;
 
 class ElectreEvaluationsTableSeeder extends Seeder
