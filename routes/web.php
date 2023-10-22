@@ -18,4 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/electre', [ElectreController::class, 'index'])->name('index');
+Route::get('/electre1', [ElectreController::class, 'electre1'])->name('electre1');
+Route::get('/electre2', [ElectreController::class, 'electre2'])->name('electre2');
+Route::get('/bobot-kriteria', [ElectreController::class, 'tampilkanBobotKriteria'])->name('bobot_kriteria');
+
