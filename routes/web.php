@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ElectreController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('content.dashboard',[
+        'title' =>'Dashboard',
+        'active' => 'dashboard'
+    ]);
 });
+
+Auth::routes();
+Route::get('/electre', [ElectreController::class, 'index']);
+Route::post('/electre', [ElectreController::class, 'process']);
+Route::get('/home', [HomeController::class, 'index'])->name('home');
