@@ -19,7 +19,9 @@
             </tbody>
         </table>
         @auth
+        @if(isset($id))
         <input type="hidden" name="id" value="{{ $id }}">
+        @endif
         @endauth
         <button class="btn btn-secondary" type="submit">Hitung</button>
     </form>

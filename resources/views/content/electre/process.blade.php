@@ -85,7 +85,9 @@
                     <input type="hidden" name="weights[]" value="{{ $weights[$i] }}">
                 @endfor
                 @auth
+                @if(isset($id))
                 <input type="hidden" name="id" value="{{ $id }}">
+                @endif
                 @endauth
                 <button class="btn btn-danger" type="submit">Kembali Ke Input</button>
             </form>
