@@ -118,7 +118,6 @@ class ElectreController extends Controller
       }
     }
   }
-  dd($c[0][0]);
   return $c;
   }
 

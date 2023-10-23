@@ -74,24 +74,27 @@
         <table class="table table-striped text-center" border="1">
             
             @for($i = 0; $i <= count($concordanceIndex); $i++)
-
+                
                 @for($j = 0; $j <= count($concordanceIndex[0]); $j++)
-                    @if($j++ == $i)
-                    <tr><td>C<sub>{{ $i + 1 . ", " . $j + 1 }}</sub></td><td>
-                    @else
-                        <td>C<sub>{{ $i + 1 . ", " . $j}}</sub></td><td>
+                    @if(isset($concordanceIndex[$i][$j]))
+                        <tr><td>C<sub>{{ $i + 1 . ", " . $j + 1 }}</sub></td>
                     @endif
-                    
-                    @for($k = 0; $k < 5; $k++)
+
+                    @if(isset($concordanceIndex[$i][$j]))
+                        <td>{{ '{' }}
+                        
+                        @for($k = 0; $k <= count($concordanceIndex); $k++)
+                        
                         @if(isset($concordanceIndex[$i][$j][$k]))
-                       {{ "$concordanceIndex[$i][$j][$k] " }}
-                       @endif
-                    @endfor
-                    </td>
-                </tr>
+                        {{ $concordanceIndex[$i][$j][$k] + 1 . ' ' }}
+                        @endif
+                        
+                        @endfor
+                        {{ '}' }}</td>
+                    @endif
                 @endfor
-            
-                @endfor           
+                </tr>
+            @endfor           
             
         </table>
     </div>
