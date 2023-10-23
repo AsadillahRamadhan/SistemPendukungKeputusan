@@ -26,6 +26,8 @@ class ElectreController extends Controller
     $discordanceIndex = $this->discordanceIndex($preferenceMatrix);
     $concordanceMatrix = $this->concordanceMatrix($concordanceIndex, $weights);
     $discordanceMatrix = $this->discordanceMatrix($discordanceIndex, $preferenceMatrix);
+    $concordanceThreshold = $this->concordanceThreshold($concordanceMatrix);
+    $discordanceThreshold = $this->discordanceThreshold($discordanceMatrix);
     return view('content.electre.process',[
       'alternatives' => $alternatives,
       'criterias' => $criterias,
@@ -177,5 +179,31 @@ class ElectreController extends Controller
     }
     return $discordanceMatrix;
   }
+
+  public function concordanceThreshold($concordanceMatrix){
+
+    $sigma_c = 0;
+    foreach($concordanceMatrix as $k => $cl){
+      foreach($cl as $l => $value){
+        $sigma_c += $value;
+      }
+    }
+    $threshold_c = $sigma_c / (count($concordanceMatrix) * (count($concordanceMatrix) - 1));
+
+    return $threshold_c;
+  }
+
+  public function discordanceThreshold($discordanceMatrix){
+    $sigma_d = 0;
+    foreach($discordanceMatrix as $k => $dl){
+      foreach($dl as $l => $value){
+        $sigma_d += $value;
+      }
+    }
+    $threshold_d = $sigma_d / (count($discordanceMatrix) * (count($discordanceMatrix) - 1));
+
+    return $threshold_d;
+  }
+
   
 }
