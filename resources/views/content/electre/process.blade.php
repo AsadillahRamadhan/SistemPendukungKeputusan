@@ -177,6 +177,43 @@
         <button class="btn btn-secondary" type="button" onclick="next(4)">Next</button>
     </div>
 </div>
+<div id="section5" class="d-none">
+    <div class="mb-3">
+        <h4>Concordance Dominant</h4>
+        <table class="table table-striped text-center" border="1">
+            @foreach($concordanceDominant as $cd)
+                <tr>
+                    @for($i = 0; $i <= count($concordanceDominant[0]); $i++)
+                        <td>{{ isset($cd[$i]) ? $cd[$i] : '-' }}</td>
+                    @endfor
+                </tr>
+            @endforeach
+        </table>
+        <h4>Discordance Dominant</h4>
+        <table class="table table-striped text-center" border="1">
+            @foreach($discordanceDominant as $dd)
+                <tr>
+                    @for($i = 0; $i <= count($discordanceDominant[0]); $i++)
+                        <td>{{ isset($dd[$i]) ? $dd[$i] : '-' }}</td>
+                    @endfor
+                </tr>
+            @endforeach
+        </table>
+        <h4>Agregation Dominant</h4>
+        <table class="table table-striped text-center" border="1">
+            @foreach($agregationDominant as $ad)
+                <tr>
+                    @for($i = 0; $i <= count($agregationDominant[0]); $i++)
+                        <td>{{ isset($ad[$i]) ? $ad[$i] : '-' }}</td>
+                    @endfor
+                </tr>
+            @endforeach
+        </table>
+    </div>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-secondary mr-2" type="button" onclick="back(5)">Back</button>
+    </div>
+</div>
 <script>
     function next(section){
         document.querySelector('#section' + section).classList.add('d-none');

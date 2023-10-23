@@ -28,6 +28,9 @@ class ElectreController extends Controller
     $discordanceMatrix = $this->discordanceMatrix($discordanceIndex, $preferenceMatrix);
     $concordanceThreshold = $this->concordanceThreshold($concordanceMatrix);
     $discordanceThreshold = $this->discordanceThreshold($discordanceMatrix);
+    $concordanceDominant = $this->concordanceDominant($concordanceThreshold, $concordanceMatrix);
+    $discordanceDominant = $this->discordanceDominant($discordanceThreshold, $discordanceMatrix);
+    $agregationDominant = $this->agregationDominant($concordanceDominant, $discordanceDominant);
     return view('content.electre.process',[
       'alternatives' => $alternatives,
       'criterias' => $criterias,
@@ -39,6 +42,9 @@ class ElectreController extends Controller
       'discordanceIndex' => $discordanceIndex,
       'concordanceMatrix' => $concordanceMatrix,
       'discordanceMatrix' => $discordanceMatrix,
+      'concordanceDominant' => $concordanceDominant,
+      'discordanceDominant' => $discordanceDominant,
+      'agregationDominant' => $agregationDominant,
       'title' => 'ELECTRE (Process)',
       'active' => 'electre'
     ]);
@@ -205,5 +211,37 @@ class ElectreController extends Controller
     return $threshold_d;
   }
 
+  public function concordanceDominant($concordanceThreshold, $concordanceMatrix){
+    $cd = array();
+      foreach($concordanceMatrix as $k => $cl){
+        $cd[$k] = array();
+        foreach($cl as $l => $value){
+          $cd[$k][$l] = ($value >= $concordanceThreshold ? 1 : 0);
+        }
+      }
+    return $cd;
+  }
+
+  public function discordanceDominant($discordanceThreshold, $discordanceMatrix){
+    $dd = array();
+      foreach($discordanceMatrix as $k => $cl){
+        $dd[$k] = array();
+        foreach($cl as $l => $value){
+          $dd[$k][$l] = ($value >= $discordanceThreshold ? 1 : 0);
+        }
+      }
+    return $dd;
+  }
+
+  public function agregationDominant($concordanceDominant, $discordanceDominant){
+    $ad = array();
+      foreach($concordanceDominant as $k => $sl){
+        $ad[$k] = array();
+        foreach($sl as $l => $value){
+          $ad[$k][$l] = $concordanceDominant[$k][$l] * $discordanceDominant[$k][$l];
+        }
+      }
+    return $ad;
+  }
   
 }
