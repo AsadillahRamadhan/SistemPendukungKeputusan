@@ -67,9 +67,32 @@
             @endforeach
         </table>
     </div>
-    <div class="d-flex justify-content-end">
-        <button class="btn btn-secondary" type="button" onclick="next(1)">Next</button>
+    <div class="d-flex justify-content-between">
+        @if(Auth::user())
+        <button class="btn btn-primary">Simpan Perubahan</button>
+        @endif
+        <form action="/electre" method="get">
+            @for($i = 0; $i < count($values); $i++)
+                @for($j = 0; $j < count($values[0]); $j++)
+                    <input type="hidden" name="values[{{ $i }}][{{ $j }}]" value="{{ $values[$i][$j] }}">
+                @endfor
+            @endfor
+            @for($i = 0; $i < count($alternatives); $i++)
+                <input type="hidden" name="alternatives[]" value="{{ $alternatives[$i] }}">
+            @endfor
+            @for($i = 0; $i < count($criterias); $i++)
+                <input type="hidden" name="criterias[]" value="{{ $criterias[$i] }}">
+            @endfor
+            @for($i = 0; $i < count($weights); $i++)
+                <input type="hidden" name="weights[]" value="{{ $weights[$i] }}">
+            @endfor
+            <button class="btn btn-danger" type="submit">Kembali Ke Input</button>
+        </form>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-secondary" type="button" onclick="next(1)">Next</button>        
+        </div>
     </div>
+    
 </div>
 <div id="section2" class="d-none">
     <div class="mb-3">

@@ -6,12 +6,24 @@ use Illuminate\Http\Request;
 
 class ElectreController extends Controller
 {
-  public function index(){
-    return view('content.electre.index',[
-      'title' => 'ELECTRE',
-      'active' => 'electre'
-    ]
-    );
+  public function index(Request $request){
+    if(isset($request)){
+      return view('content.electre.index',[
+        'title' => 'ELECTRE',
+        'active' => 'electre',
+        'alternatives' => $request->get('alternatives'),
+        'criterias' => $request->get('criterias'),
+        'values' => $request->get('values'),
+        'weights' => $request->get('weights')
+      ]
+      );
+    } else {
+      return view('content.electre.index',[
+        'title' => 'ELECTRE',
+        'active' => 'electre',
+      ]
+      );
+    }
   }
 
   public function process(Request $request){
