@@ -99,5 +99,36 @@
         </table>
     </div>
 </div>
+<div id="section3">
+    <div class="mb-3">
+        <h4>Disconcordance Index</h4>
+        <table class="table table-striped text-center" border="1">
+            
+            @for($i = 0; $i <= count($disconcordanceIndex); $i++)
+                
+                @for($j = 0; $j <= count($disconcordanceIndex[0]); $j++)
+                    @if(isset($disconcordanceIndex[$i][$j]))
+                        <tr><td>C<sub>{{ $i + 1 . ", " . $j + 1 }}</sub></td>
+                    @endif
+
+                    @if(isset($disconcordanceIndex[$i][$j]))
+                        <td>{{ '{' }}
+                        
+                        @for($k = 0; $k <= count($disconcordanceIndex); $k++)
+                        
+                        @if(isset($disconcordanceIndex[$i][$j][$k]))
+                        {{ $disconcordanceIndex[$i][$j][$k] + 1 . ' ' }}
+                        @endif
+                        
+                        @endfor
+                        {{ '}' }}</td>
+                    @endif
+                @endfor
+                </tr>
+            @endfor           
+            
+        </table>
+    </div>
+</div>
 
 @endsection

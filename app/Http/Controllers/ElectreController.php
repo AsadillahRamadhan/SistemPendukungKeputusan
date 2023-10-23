@@ -23,6 +23,7 @@ class ElectreController extends Controller
     $normalizations = $this->normalization($values);
     $preferenceMatrix = $this->preferenceMatrix($normalizations, $weights);
     $concordanceIndex = $this->concordanceIndex($preferenceMatrix);
+    $disconcordanceIndex = $this->disconcordanceIndex($preferenceMatrix);
     return view('content.electre.process',[
       'alternatives' => $alternatives,
       'criterias' => $criterias,
@@ -31,6 +32,7 @@ class ElectreController extends Controller
       'normalizations' => $normalizations,
       'preferenceMatrix' => $preferenceMatrix,
       'concordanceIndex' => $concordanceIndex,
+      'disconcordanceIndex' => $disconcordanceIndex,
       'title' => 'ELECTRE (Process)',
       'active' => 'electre'
     ]);
@@ -64,64 +66,58 @@ class ElectreController extends Controller
   }
 
   public function concordanceIndex($preferenceMatrix){
-    // $concordanceIndex = array();
-    // $index = [0, 1];
-    // $temp = 0;
-    // for($i = 0; $i < count($preferenceMatrix) * count($preferenceMatrix[0]); $i++){
-    //     // if($preferenceMatrix[$index[0]][$i] >= $preferenceMatrix[$index[1]][$i]){
-    //     //   $concordanceIndex[$index[0]][$index[1]] = 2;
-    //     // }
-    //     array_push($concordanceIndex, "$index[0], $index[1]");
-    //     if($i + 1 == count($preferenceMatrix)){
-    //       if($temp == count($preferenceMatrix)){
-    //         $index[0]++;
-    //       }
-    //       if($index[1] == count($preferenceMatrix)){
-    //         $index[1] = 0;
-    //         $temp++;
-    //       } else {
-    //         if($index[1] + 1 == $index[0]){
-    //           $index[1] += 2;
-    //           $temp++;
-    //         } else {
-    //           $index[1]++;
-    //           $temp++;
-    //         }
-            
-    //       }
-          
-    //     }
-    //   }
-    //   dd($concordanceIndex);
 
-    /* mencari himpunan concordance index
-     $n = jumlah kriteria
-     $m = jumlah alternatif
-     $V = matrik preferensi
-     $c = himpunan concordance index
-  */
-  $c=array();
-  $c_index='';
-  for($k=0;$k<count($preferenceMatrix);$k++){
-    if($c_index!=$k){
-      $c_index=$k;
-      $c[$k]=array();
-    }
-    for($l=0;$l<count($preferenceMatrix);$l++){
-      if($k!=$l){
-        for($j=0;$j<count($preferenceMatrix[0]);$j++){
-          if(!isset($c[$k][$l]))$c[$k][$l]=array();
-          if($preferenceMatrix[$k][$j]>=$preferenceMatrix[$l][$j]){
-            array_push($c[$k][$l],$j);
+    $concordanceIndex = array();
+    $index = '';
+    for($i = 0; $i < count($preferenceMatrix); $i++){
+      if($index != $i){
+        $index = $i;
+        $concordanceIndex[$i] = array();
+      }
+
+      for($j = 0; $j < count($preferenceMatrix); $j++){
+        if($i != $j){
+          for($k = 0; $k < count($preferenceMatrix[0]); $k++){
+            if(!isset($concordanceIndex[$i][$j])){
+              $concordanceIndex[$i][$j] = array();
+            }
+            if($preferenceMatrix[$i][$k] >= $preferenceMatrix[$j][$k]){
+              array_push($concordanceIndex[$i][$j], $k);
+            }
           }
         }
       }
     }
-  }
-  return $c;
+
+  return $concordanceIndex;
+
   }
 
-  public function disconcordanceIndex($disconcordanceIndex){
+  public function disconcordanceIndex($preferenceMatrix){
+
+    $disconcordanceIndex = array();
+    $index = '';
+    for($i = 0; $i < count($preferenceMatrix); $i++){
+      if($index != $i){
+        $index = $i;
+        $disconcordanceIndex[$i] = array();
+      }
+
+      for($j = 0; $j < count($preferenceMatrix); $j++){
+        if($i != $j){
+          for($k = 0; $k < count($preferenceMatrix[0]); $k++){
+            if(!isset($disconcordanceIndex[$i][$j])){
+              $disconcordanceIndex[$i][$j] = array();
+            }
+            if($preferenceMatrix[$i][$k] < $preferenceMatrix[$j][$k]){
+              array_push($disconcordanceIndex[$i][$j], $k);
+            }
+          }
+        }
+      }
+    }
+
+  return $disconcordanceIndex;
 
   }
   
