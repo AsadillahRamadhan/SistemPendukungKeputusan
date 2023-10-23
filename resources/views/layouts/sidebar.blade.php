@@ -66,6 +66,7 @@
                 </a>
               </li>
             </ul>
+            @auth
             <li class="nav-item">
               <a href="/history" class="nav-link {{ $active == 'history' ? 'active' : '' }}">
                 <i class="nav-icon fas fa-clock"></i>
@@ -74,6 +75,7 @@
                 </p>
               </a>
             </li>
+            @endauth
         </ul>
         
       </nav>

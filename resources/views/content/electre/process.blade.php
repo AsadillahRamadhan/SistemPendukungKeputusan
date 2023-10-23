@@ -84,7 +84,9 @@
                 @for($i = 0; $i < count($weights); $i++)
                     <input type="hidden" name="weights[]" value="{{ $weights[$i] }}">
                 @endfor
+                @auth
                 <input type="hidden" name="id" value="{{ $id }}">
+                @endauth
                 <button class="btn btn-danger" type="submit">Kembali Ke Input</button>
             </form>
             @if(Auth::user())

@@ -18,7 +18,9 @@
             <tbody id="table" class="mb-3">
             </tbody>
         </table>
+        @auth
         <input type="hidden" name="id" value="{{ $id }}">
+        @endauth
         <button class="btn btn-secondary" type="submit">Hitung</button>
     </form>
 </div>
