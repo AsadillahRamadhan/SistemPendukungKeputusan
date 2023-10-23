@@ -67,8 +67,11 @@
             @endforeach
         </table>
     </div>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-secondary" type="button" onclick="next(1)">Next</button>
+    </div>
 </div>
-<div id="section2">
+<div id="section2" class="d-none">
     <div class="mb-3">
         <h4>Concordance Index</h4>
         <table class="table table-striped text-center" border="1">
@@ -98,26 +101,30 @@
             
         </table>
     </div>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-secondary mr-2" type="button" onclick="back(2)">Back</button>
+        <button class="btn btn-secondary" type="button" onclick="next(2)">Next</button>
+    </div>
 </div>
-<div id="section3">
+<div id="section3" class="d-none">
     <div class="mb-3">
-        <h4>Disconcordance Index</h4>
+        <h4>Discordance Index</h4>
         <table class="table table-striped text-center" border="1">
             
-            @for($i = 0; $i <= count($disconcordanceIndex); $i++)
+            @for($i = 0; $i <= count($discordanceIndex); $i++)
                 
-                @for($j = 0; $j <= count($disconcordanceIndex[0]); $j++)
-                    @if(isset($disconcordanceIndex[$i][$j]))
+                @for($j = 0; $j <= count($discordanceIndex[0]); $j++)
+                    @if(isset($discordanceIndex[$i][$j]))
                         <tr><td>C<sub>{{ $i + 1 . ", " . $j + 1 }}</sub></td>
                     @endif
 
-                    @if(isset($disconcordanceIndex[$i][$j]))
+                    @if(isset($discordanceIndex[$i][$j]))
                         <td>{{ '{' }}
                         
-                        @for($k = 0; $k <= count($disconcordanceIndex); $k++)
+                        @for($k = 0; $k <= count($discordanceIndex); $k++)
                         
-                        @if(isset($disconcordanceIndex[$i][$j][$k]))
-                        {{ $disconcordanceIndex[$i][$j][$k] + 1 . ' ' }}
+                        @if(isset($discordanceIndex[$i][$j][$k]))
+                        {{ $discordanceIndex[$i][$j][$k] + 1 . ' ' }}
                         @endif
                         
                         @endfor
@@ -129,6 +136,56 @@
             
         </table>
     </div>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-secondary mr-2" type="button" onclick="back(3)">Back</button>
+        <button class="btn btn-secondary" type="button" onclick="next(3)">Next</button>
+    </div>
 </div>
+<div id="section4" class="d-none">
+    <div class="mb-3">
+        <h4>Concordance Matrix</h4>
+        <table class="table table-striped text-center" border="1">
+            @foreach($concordanceMatrix as $cm)
+                <tr>
+                @for($i = 0; $i <= count($cm); $i++)
+                <td>{{ isset($cm[$i]) ? $cm[$i] : "-" }}</td>
+                @endfor
+                </tr>
+            @endforeach
+        </table>
+        <h4>Discordance Matrix</h4>
+        <table class="table table-striped text-center" border="1">
+            @foreach($discordanceMatrix as $dm)
+                <tr>
+                @for($i = 0; $i <= count($dm); $i++)
+                @if(isset($dm[$i]))
+                    @if($dm[$i] == 1 || $dm[$i] == 0)
+                        <td>{{ $dm[$i] }}</td>
+                    @else
+                        <td>{{ number_format($dm[$i], 4) }}</td>
+                    @endif
+                @else
+                    <td>-</td>
+                @endif
+                @endfor
+                </tr>
+            @endforeach
+        </table>
+    </div>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-secondary mr-2" type="button" onclick="back(4)">Back</button>
+        <button class="btn btn-secondary" type="button" onclick="next(4)">Next</button>
+    </div>
+</div>
+<script>
+    function next(section){
+        document.querySelector('#section' + section).classList.add('d-none');
+        document.querySelector('#section' + parseInt(section + 1)).classList.remove('d-none');
+    }
 
+    function back(section){
+        document.querySelector('#section' + section).classList.add('d-none');
+        document.querySelector('#section' + parseInt(section - 1)).classList.remove('d-none');
+    }
+</script>
 @endsection

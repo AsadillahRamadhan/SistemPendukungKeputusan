@@ -23,7 +23,9 @@ class ElectreController extends Controller
     $normalizations = $this->normalization($values);
     $preferenceMatrix = $this->preferenceMatrix($normalizations, $weights);
     $concordanceIndex = $this->concordanceIndex($preferenceMatrix);
-    $disconcordanceIndex = $this->disconcordanceIndex($preferenceMatrix);
+    $discordanceIndex = $this->discordanceIndex($preferenceMatrix);
+    $concordanceMatrix = $this->concordanceMatrix($concordanceIndex, $weights);
+    $discordanceMatrix = $this->discordanceMatrix($discordanceIndex, $preferenceMatrix);
     return view('content.electre.process',[
       'alternatives' => $alternatives,
       'criterias' => $criterias,
@@ -32,7 +34,9 @@ class ElectreController extends Controller
       'normalizations' => $normalizations,
       'preferenceMatrix' => $preferenceMatrix,
       'concordanceIndex' => $concordanceIndex,
-      'disconcordanceIndex' => $disconcordanceIndex,
+      'discordanceIndex' => $discordanceIndex,
+      'concordanceMatrix' => $concordanceMatrix,
+      'discordanceMatrix' => $discordanceMatrix,
       'title' => 'ELECTRE (Process)',
       'active' => 'electre'
     ]);
@@ -93,32 +97,85 @@ class ElectreController extends Controller
 
   }
 
-  public function disconcordanceIndex($preferenceMatrix){
+  public function discordanceIndex($preferenceMatrix){
 
-    $disconcordanceIndex = array();
+    $discordanceIndex = array();
     $index = '';
     for($i = 0; $i < count($preferenceMatrix); $i++){
       if($index != $i){
         $index = $i;
-        $disconcordanceIndex[$i] = array();
+        $discordanceIndex[$i] = array();
       }
 
       for($j = 0; $j < count($preferenceMatrix); $j++){
         if($i != $j){
           for($k = 0; $k < count($preferenceMatrix[0]); $k++){
-            if(!isset($disconcordanceIndex[$i][$j])){
-              $disconcordanceIndex[$i][$j] = array();
+            if(!isset($discordanceIndex[$i][$j])){
+              $discordanceIndex[$i][$j] = array();
             }
             if($preferenceMatrix[$i][$k] < $preferenceMatrix[$j][$k]){
-              array_push($disconcordanceIndex[$i][$j], $k);
+              array_push($discordanceIndex[$i][$j], $k);
             }
           }
         }
       }
     }
 
-  return $disconcordanceIndex;
+  return $discordanceIndex;
 
+  }
+
+  public function concordanceMatrix($concordanceIndex, $weights){
+    $concordanceMatrix = array();
+    $index = '';
+
+    for($i = 0; $i < count($concordanceIndex); $i++){
+      if($index != $i){
+        $index = $i;
+        $concordanceMatrix[$i] = array();
+      }
+
+      for($j = 0; $j < count($concordanceIndex); $j++){
+        if($i != $j && count($concordanceIndex[$i][$j])){
+          foreach($concordanceIndex[$i][$j] as $con){
+            $concordanceMatrix[$i][$j] = (isset($concordanceMatrix[$i][$j]) ? $concordanceMatrix[$i][$j] : 0) + (int) $weights[$con];
+          }
+        }
+      }
+    }
+    return $concordanceMatrix;
+  }
+
+  public function discordanceMatrix($discordanceIndex, $preferenceMatrix){
+    
+    $discordanceMatrix = array();
+    $index = '';
+
+    for($i = 0; $i < count($discordanceIndex); $i++){
+      if($index != $i){
+        $index = $i;
+        $discordanceMatrix[$i] = array();
+      }
+
+      for($j = 0; $j < count($discordanceIndex); $j++){
+        if($i != $j){
+          $max_d = 0;
+          $max_j = 0;
+            foreach($discordanceIndex[$i][$j] as $disc){
+              if($max_d < abs($preferenceMatrix[$i][$disc] - $preferenceMatrix[$j][$disc])){
+                $max_d = abs($preferenceMatrix[$i][$disc] - $preferenceMatrix[$j][$disc]);
+              }
+            }
+            for($k = 0; $k < count($preferenceMatrix[0]); $k++){
+              if($max_j < abs($preferenceMatrix[$i][$k] - $preferenceMatrix[$j][$k])){
+                $max_j = abs($preferenceMatrix[$i][$k] - $preferenceMatrix[$j][$k]);
+              }
+            }
+            $discordanceMatrix[$i][$j] = $max_d / $max_j;
+        }
+      }
+    }
+    return $discordanceMatrix;
   }
   
 }
