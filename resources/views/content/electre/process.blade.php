@@ -68,27 +68,38 @@
         </table>
     </div>
     <div class="d-flex justify-content-between">
-        @if(Auth::user())
-        <button class="btn btn-primary">Simpan Perubahan</button>
-        @endif
-        <form action="/electre" method="get">
-            @for($i = 0; $i < count($values); $i++)
-                @for($j = 0; $j < count($values[0]); $j++)
-                    <input type="hidden" name="values[{{ $i }}][{{ $j }}]" value="{{ $values[$i][$j] }}">
+        <div class="d-flex">
+            <form action="/electre" method="get" class="mr-2">
+                @for($i = 0; $i < count($values); $i++)
+                    @for($j = 0; $j < count($values[0]); $j++)
+                        <input type="hidden" name="values[{{ $i }}][{{ $j }}]" value="{{ $values[$i][$j] }}">
+                    @endfor
                 @endfor
-            @endfor
-            @for($i = 0; $i < count($alternatives); $i++)
-                <input type="hidden" name="alternatives[]" value="{{ $alternatives[$i] }}">
-            @endfor
-            @for($i = 0; $i < count($criterias); $i++)
-                <input type="hidden" name="criterias[]" value="{{ $criterias[$i] }}">
-            @endfor
-            @for($i = 0; $i < count($weights); $i++)
-                <input type="hidden" name="weights[]" value="{{ $weights[$i] }}">
-            @endfor
-            <button class="btn btn-danger" type="submit">Kembali Ke Input</button>
-        </form>
-        <div class="d-flex justify-content-end">
+                @for($i = 0; $i < count($alternatives); $i++)
+                    <input type="hidden" name="alternatives[]" value="{{ $alternatives[$i] }}">
+                @endfor
+                @for($i = 0; $i < count($criterias); $i++)
+                    <input type="hidden" name="criterias[]" value="{{ $criterias[$i] }}">
+                @endfor
+                @for($i = 0; $i < count($weights); $i++)
+                    <input type="hidden" name="weights[]" value="{{ $weights[$i] }}">
+                @endfor
+                <input type="hidden" name="id" value="{{ $id }}">
+                <button class="btn btn-danger" type="submit">Kembali Ke Input</button>
+            </form>
+            @if(Auth::user())
+            <form action="/save" method="post" id="save">
+                @csrf
+                <input type="hidden" name="values" value="{{ json_encode($values) }}">
+                <input type="hidden" name="alternatives" value="{{ json_encode($alternatives) }}">
+                <input type="hidden" name="criterias" value="{{ json_encode($criterias) }}">
+                <input type="hidden" name="weights" value="{{ json_encode($weights) }}">
+                <input type="hidden" name="id" value="{{ $id }}">
+                <button class="btn btn-primary" onclick="return yakin()">Simpan Perubahan</button>
+            </form>
+            @endif
+        </div>
+        <div>
             <button class="btn btn-secondary" type="button" onclick="next(1)">Next</button>        
         </div>
     </div>
@@ -246,6 +257,26 @@
     function back(section){
         document.querySelector('#section' + section).classList.add('d-none');
         document.querySelector('#section' + parseInt(section - 1)).classList.remove('d-none');
+    }
+    function yakin(){
+        event.preventDefault()
+        Swal.fire({
+            title: 'Apakah Kamu Yakin Untuk Menyimpan?',
+            html: '<p>Data sebelumnya akan ditimpa oleh data yang baru</p>',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            denyButtonText: `Don't save`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.querySelector('#save').submit()
+                return true;
+
+            } else if (result.isDenied) {
+                Swal.fire('Changes are not saved', '', 'info')
+                return false;
+            }
+        })
     }
 </script>
 @endsection

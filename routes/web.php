@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ElectreController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,6 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/electre', [ElectreController::class, 'index']);
 Route::post('/electre', [ElectreController::class, 'process']);
+Route::post('/save', [ElectreController::class, 'save']);
+Route::get('history', [UserController::class, 'history']);
 Route::get('/home', [HomeController::class, 'index'])->name('home');

@@ -18,6 +18,7 @@
             <tbody id="table" class="mb-3">
             </tbody>
         </table>
+        <input type="hidden" name="id" value="{{ $id }}">
         <button class="btn btn-secondary" type="submit">Hitung</button>
     </form>
 </div>
@@ -31,7 +32,6 @@
     $alternatif = 0;
     @endphp
     loadTabel()
-    @endif
     function loadTabel(){
         jumlah_kriteria = document.querySelector('#kriteria').value
         jumlah_alternatif = parseInt(document.querySelector('#alternatif').value) + 1
@@ -87,6 +87,8 @@
         @endfor
         document.querySelector('.d-none').classList.remove('d-none')
     }
+    @endif
+    
     function tambahTabel(){
         jumlah_kriteria = document.querySelector('#kriteria').value
         jumlah_alternatif = parseInt(document.querySelector('#alternatif').value) + 1

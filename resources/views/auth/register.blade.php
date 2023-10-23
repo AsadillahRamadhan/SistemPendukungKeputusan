@@ -25,34 +25,37 @@
 
       <form action="/register" method="post">
         @csrf
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Full name" name="name">
+        <div class="input-group {{ $errors->has('name') ? '' : 'mb-3' }}">
+          <input type="text" class="form-control {{ $errors->has('name') ? 'border border-danger' : '' }}" placeholder="Full name" name="name">
           <div class="input-group-append">
-            <div class="input-group-text">
+            <div class="input-group-text {{ $errors->has('name') ? 'border border-danger' : '' }}">
               <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email">
+        <span class="small">{{ $errors->first('name') }}</span>
+        <div class="input-group {{ $errors->has('email') ? '' : 'mb-3' }} {{ $errors->has('name') ? 'mt-3' : '' }}">
+          <input type="email" class="form-control {{ $errors->has('email') ? 'border border-danger' : '' }}" placeholder="Email" name="email">
           <div class="input-group-append">
-            <div class="input-group-text">
+            <div class="input-group-text {{ $errors->has('email') ? 'border border-danger' : '' }}">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password">
+        <span class="small">{{ $errors->first('email') }}</span>
+        <div class="input-group {{ $errors->has('password') ? '' : 'mb-3' }} {{ $errors->has('email') ? 'mt-3' : '' }}">
+          <input type="password" class="form-control {{ $errors->has('password') ? 'border border-danger' : '' }}" placeholder="Password" name="password">
           <div class="input-group-append">
-            <div class="input-group-text">
+            <div class="input-group-text" {{ $errors->has('password') ? 'border border-danger' : '' }}>
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Retype password" name="password_confirmation">
+        <span class="small">{{ $errors->first('password') }}</span>
+        <div class="input-group mb-3 {{ $errors->has('password') ? 'mt-3' : '' }}">
+          <input type="password" class="form-control {{ $errors->has('password_confirmation') ? 'border border-danger' : '' }}" placeholder="Retype password" name="password_confirmation">
           <div class="input-group-append">
-            <div class="input-group-text">
+            <div class="input-group-text {{ $errors->has('password_confirmation') ? 'border border-danger' : '' }}">
               <span class="fas fa-lock"></span>
             </div>
           </div>

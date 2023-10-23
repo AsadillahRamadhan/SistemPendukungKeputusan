@@ -66,7 +66,16 @@
                 </a>
               </li>
             </ul>
+            <li class="nav-item">
+              <a href="/history" class="nav-link {{ $active == 'history' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-clock"></i>
+                <p>
+                  History
+                </p>
+              </a>
+            </li>
         </ul>
+        
       </nav>
       <!-- /.sidebar-menu -->
     </div>

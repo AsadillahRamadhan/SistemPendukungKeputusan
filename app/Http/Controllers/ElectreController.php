@@ -3,11 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Method;
+use Hamcrest\Arrays\IsArray;
 
 class ElectreController extends Controller
 {
   public function index(Request $request){
     if(isset($request)){
+      if($request->get('id')){
+        if(is_array($request->get('alternatives'))){
+          return view('content.electre.index',[
+            'title' => 'ELECTRE',
+            'active' => 'electre',
+            'alternatives' => $request->get('alternatives'),
+            'criterias' => $request->get('criterias'),
+            'values' => $request->get('values'),
+            'weights' => $request->get('weights'),
+            'id' => $request->get('id')
+          ]);
+        } else {
+          return view('content.electre.index',[
+            'title' => 'ELECTRE',
+            'active' => 'electre',
+            'alternatives' => json_decode($request->get('alternatives')),
+            'criterias' => json_decode($request->get('criterias')),
+            'values' => json_decode($request->get('values')),
+            'weights' => json_decode($request->get('weights')),
+            'id' => $request->get('id')
+          ]
+          );
+        }
+        
+      }
       return view('content.electre.index',[
         'title' => 'ELECTRE',
         'active' => 'electre',
@@ -57,6 +85,7 @@ class ElectreController extends Controller
       'concordanceDominant' => $concordanceDominant,
       'discordanceDominant' => $discordanceDominant,
       'agregationDominant' => $agregationDominant,
+      'id' => $request->post('id'),
       'title' => 'ELECTRE (Process)',
       'active' => 'electre'
     ]);
@@ -256,4 +285,35 @@ class ElectreController extends Controller
     return $ad;
   }
   
+  public function save(Request $request){
+    if($request->post('id')){
+      $method = Method::find($request->post('id'));
+      $values = $request->post('values');
+      $criterias = $request->post('criterias');
+      $alternatives = $request->post('alternatives');
+      $weights = $request->post('weights');
+      $method->name = 'ELECTRE';
+      $method->data = $values;
+      $method->alternatives = $alternatives;
+      $method->criterias = $criterias;
+      $method->weights = $weights;
+      $method->user_id = Auth::user()->id;
+      $method->save();
+      return redirect('/history');
+    } else {
+      $method = new Method();
+      $values = $request->post('values');
+      $criterias = $request->post('criterias');
+      $alternatives = $request->post('alternatives');
+      $weights = $request->post('weights');
+      $method->name = 'ELECTRE';
+      $method->data = $values;
+      $method->alternatives = $alternatives;
+      $method->criterias = $criterias;
+      $method->weights = $weights;
+      $method->user_id = Auth::user()->id;
+      $method->save();
+      return redirect('/history')->with('id', $method->id);
+    }
+  }
 }

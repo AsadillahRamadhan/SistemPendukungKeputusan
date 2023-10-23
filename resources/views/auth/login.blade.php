@@ -26,22 +26,24 @@
 
       <form action="/login" method="post">
         @csrf
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email">
+        <div class="input-group {{ $errors->has('email') ? '' : 'mb-3' }}">
+          <input type="email" class="form-control {{ $errors->has('email') ? 'border border-danger' : '' }}" placeholder="Email" name="email">
           <div class="input-group-append">
-            <div class="input-group-text">
+            <div class="input-group-text {{ $errors->has('email') ? 'border border-danger' : '' }}">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password">
+        <span class="small">{{ $errors->first('email') }}</span>
+        <div class="input-group {{ $errors->has('password') ? '' : 'mb-3' }} {{ $errors->has('email') ? 'mt-3' : '' }}">
+          <input type="password" class="form-control {{ $errors->has('password') ? 'border border-danger' : '' }}" placeholder="Password" name="password">
           <div class="input-group-append">
-            <div class="input-group-text">
+            <div class="input-group-text {{ $errors->has('password') ? 'border border-danger' : '' }}">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
+        <span class="small">{{ $errors->first('password') }}</span>
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">

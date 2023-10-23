@@ -1,4 +1,6 @@
 <!-- REQUIRED SCRIPTS -->
+{{-- Sweetalert --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- jQuery -->
 <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap -->
