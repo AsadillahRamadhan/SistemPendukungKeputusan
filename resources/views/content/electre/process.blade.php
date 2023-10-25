@@ -153,7 +153,7 @@
                 
                 @for($j = 0; $j <= count($discordanceIndex[0]); $j++)
                     @if(isset($discordanceIndex[$i][$j]))
-                        <tr><td>C<sub>{{ $i + 1 . ", " . $j + 1 }}</sub></td>
+                        <tr><td>D<sub>{{ $i + 1 . ", " . $j + 1 }}</sub></td>
                     @endif
 
                     @if(isset($discordanceIndex[$i][$j]))

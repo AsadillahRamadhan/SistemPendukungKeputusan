@@ -59,7 +59,6 @@ class ElectreController extends Controller
     $criterias = $request->post('criterias');
     $values = $request->post('values');
     $weights = $request->post('weights');
-
     $normalizations = $this->normalization($values);
     $preferenceMatrix = $this->preferenceMatrix($normalizations, $weights);
     $concordanceIndex = $this->concordanceIndex($preferenceMatrix);
